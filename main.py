@@ -1,7 +1,9 @@
 from fastapi import FastAPI, HTTPException, Body, status
+from pydantic.datetime_parse import parse_date
 from datetime import date, datetime
 from pymongo import MongoClient, ReturnDocument
 from pydantic import BaseModel, validator
+from fastapi.middleware.cors import CORSMiddleware
 
 from typing import List
 
@@ -35,6 +37,14 @@ db = client[DATABASE_NAME]
 collection = db[COLLECTION_NAME]
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def room_avaliable(room_id: int, start_date: str, end_date: str):
